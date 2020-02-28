@@ -1,0 +1,21 @@
+
+- name: litecoin
+  hosts: localhost
+  vars:
+    image: wallets/litecoin
+    tag: 0.17.1-1
+  tasks:
+    - name: build image
+      docker_image:
+        path: ./
+        name: "{{ image }}"
+        tag: "{{ tag }}"
+    - name: deploy litecoin
+      docker_container:
+        name: litecoin
+        image: "{{ image }}:{{ tag }}"
+        memory: 2048M
+        volumes:
+                - "./data:/srv:rw,Z"
+                - "./config/litecoin.conf:/opt/litecoin.conf:ro,Z"
+
